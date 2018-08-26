@@ -1,0 +1,19 @@
+# Created by .ignore support plugin (hsz.mobi)
+### PlayFramework template
+# Ignore Play! working directory #
+/logs
+ .DS_Store
+ project/project
+ project/target
+ target
+ tmp
+ .history
+ dist
+ /.idea
+ /*.iml
+ /out
+ /.idea_modules
+ /.classpath
+ /.project
+ /RUNNING_PID
+ /.settings

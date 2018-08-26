@@ -2,7 +2,10 @@ name := "funktor"
 
 version := "1.0"
 
-scalaVersion := "2.11.12"
+scalaVersion := "2.12.6"
+val akkaVersion = "2.5.14"
+val akkaHttpVersion = "10.1.4"
+val alpakkaVersion = "0.16"
 
 libraryDependencies ++= Seq(
   guice,
@@ -22,7 +25,12 @@ libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-mllib" % "2.2.1",
   "org.apache.hadoop" % "hadoop-client" % "3.1.0",
   "com.github.fommil.netlib" % "all" % "1.1.2",
-  "org.apache.bahir" %% "spark-streaming-twitter" % "2.2.0"
+  "org.apache.bahir" %% "spark-streaming-twitter" % "2.2.0",
+
+  "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
+  "org.mockito" % "mockito-all" % "2.0.2-beta" % Test,
+  "com.typesafe.akka" %% "akka-stream-testkit" % akkaVersion % Test,
+  "net.jadler" % "jadler-all" % "1.3.0" % Test
   )     
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
