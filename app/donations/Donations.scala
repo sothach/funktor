@@ -1,4 +1,4 @@
-package utils
+package donations
 
 import java.time.LocalDateTime
 import java.util.UUID
@@ -8,6 +8,7 @@ import javax.inject.{Inject, Singleton}
 import model.Donation
 import org.apache.spark.sql.SparkSession
 import play.api.Logger
+import source.Database
 
 import scala.concurrent.Future
 
@@ -17,8 +18,6 @@ class Donations @Inject()(system: ActorSystem, db: Database) {
   implicit val ec = system.dispatcher
 
   def run = Future {
-    logger.debug("running Donations")
-
     val spark = SparkSession
       .builder()
       .appName("Scintilla")

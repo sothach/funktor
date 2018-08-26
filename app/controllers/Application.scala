@@ -4,7 +4,7 @@ import akka.actor.ActorSystem
 import javax.inject.{Inject, Singleton}
 import play.api.mvc._
 
-import utils._
+import donations._
 
 @Singleton
 class Application @Inject()(system: ActorSystem,

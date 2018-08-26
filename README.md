@@ -1,19 +1,38 @@
-spark-scala
-===========
+# Funktor
+Play / Spark sandbox
 
-Apache Spark is a fast and general-purpose cluster computing system. It provides high-level APIs in Scala, Java, and Python that make parallel jobs easy to write, and an optimized engine that supports general computation graphs. It also supports a rich set of higher-level tools including Shark (Hive on Spark), MLlib for machine learning, GraphX for graph processing, and Spark Streaming.
+### Status
+[![Build Status](https://travis-ci.org/sothach/funktor.png)](https://travis-ci.org/sothach/funktor)
+[![Coverage Status](https://coveralls.io/repos/github/sothach/funktor/badge.svg?branch=master)](https://coveralls.io/github/sothach/funktor?branch=master)
 
-This is Spark Application which is built in Play 2.2.0. We can build it in any Play version. One thing that we have to keep in mind is the Akka version should be compatible to both Spark & Play. So, check the Akka version in Spark & Play that are inbuilt.
+## Overview
+This app is intended as a sandbox to experiment with the various aspects of Apache Spark and it's libraries.
+A web interface is provided to render the results of data manipulations in a convenient manner.
+The target data source is a Postgres database, preloaded with sample datasets
 
-Commands to run this Application:
 
-1. play clean
-2. play compile
-3. play dist
-4. play run
+## Testing
+### Running the tests
+Run the test suite to verify correct behaviour.  
 
-Note: 
-> Whenever a change is made in the application, then run play dist command otherwise changes in the Spark files/functions will be not be reflected.
-> To run only Spark Streaming, Spark SQL, Spark MLLib part you dont need to run command - "play dist".
+From the command line:
+```sbtshell
+% sbt test
+```
+### Test Coverage Report
+To measure test coverage, this app uses the 'scoverage' SBT plugin.
+To create the report, from the command line:
+```sbtshell
+% sbt coverage test coverageReport
+```
 
-We have upgraded our application to Apache Spark 1.0.1.
+## Author
+* [Roy Phillips](mailto:phillips.roy@gmail.com)
+
+## License
+[![License](https://licensebuttons.net/l/by/3.0/88x31.png)](https://creativecommons.org/licenses/by/4.0/) 
+
+(c) 2018 This project is licensed under Creative Commons License
+
+[Attribution 4.0 International (CC BY 4.0)](LICENSE.md)
+
