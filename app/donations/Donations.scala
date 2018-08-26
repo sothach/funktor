@@ -17,29 +17,25 @@ class Donations @Inject()(system: ActorSystem, db: Database) {
   val logger = Logger(this.getClass)
   implicit val ec = system.dispatcher
 
-  def run = Future {
-    val spark = SparkSession
-      .builder()
-      .appName("Scintilla")
-      .master("local")
-      .getOrCreate()
+  val donatonEventQuery = """SELECT a.id, a.aggregate_id, a.event_type, a.created, a.category, a.quantity, a.donor_id, a.recipient_id
+                            | FROM donation_event a
+                            |  INNER JOIN (
+                            |    SELECT aggregate_id, MAX(created) latest, id
+                            |    FROM donation_event WHERE event_type = 'Available'
+                            |    GROUP BY aggregate_id, id
+                            |  ) b ON a.id = b.id""".stripMargin
 
-    spark.read
-      .format("jdbc")
+  def run = Future {
+    val spark = SparkSession.builder()
+      .appName("Funktor").master("local").getOrCreate()
+
+    spark.read.format("jdbc")
       .option("url", db.url)
       .option("driver", db.driver)
-      .option("dbtable", "donation_event")
-      .load()
+      .option("dbtable", "donation_event").load()
       .createOrReplaceTempView("donation_event")
 
-    val folded = spark.sql(
-      """SELECT a.id, a.aggregate_id, a.event_type, a.created, a.category, a.quantity, a.donor_id, a.recipient_id
-         | FROM donation_event a
-         |  INNER JOIN (
-         |    SELECT aggregate_id, MAX(created) latest, id
-         |    FROM donation_event WHERE event_type = 'Available'
-         |    GROUP BY aggregate_id, id
-         |  ) b ON a.id = b.id""".stripMargin)
+    val folded = spark.sql(donatonEventQuery)
 
     println("folded:")
     folded.sort("aggregate_id").show(100)
@@ -62,21 +58,12 @@ class Donations @Inject()(system: ActorSystem, db: Database) {
 
     val result = pivoted.collect() map { row =>
       lazy val products = (1 to 3) map { i =>
-        if(!row.isNullAt(i)) {
-          Some(productTags(i-1) -> row.getAs[Double](i))
-        } else {
-          None
-        }
+        if(!row.isNullAt(i)) {Some(productTags(i-1) -> row.getAs[Double](i))} else {None}
       }
       val ps = () => products.collect { case Some(t) => t}.toMap
 
-      Donation(
-        aggregateId=UUID.fromString(row.getString(0)),
-        received=LocalDateTime.now,
-        status="",
-        donorId="",
-        charityId=None,
-        products=ps())
+      Donation(aggregateId=UUID.fromString(row.getString(0)),
+        received=LocalDateTime.now, status="", donorId="", charityId=None, products=ps())
     }
 
     spark.close()
