@@ -48,8 +48,7 @@ class Donations @Inject()(system: ActorSystem, db: Database) {
     println("pivoted:")
     pivoted.sort("aggregate_id").show(100)
 
-    val leftRight = folded
-      .withColumnRenamed("category", "left")
+    val leftRight = folded.withColumnRenamed("category", "left")
       .join(folded.withColumnRenamed("category", "right"), Seq("id"))
     println("crosstab join:")
     leftRight.stat.crosstab("left", "right").show()
