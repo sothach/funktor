@@ -14,7 +14,7 @@ import scala.concurrent.duration._
 
 class ApplicationSpec extends PlaySpec with ScalaFutures with GuiceOneAppPerSuite with BeforeAndAfterAll with DefaultAwaitTimeout {
 
-  override implicit val defaultAwaitTimeout: Timeout = 60 seconds
+  override implicit val defaultAwaitTimeout: Timeout = 120 seconds
 
   val database = Databases.inMemory(name = "scidb",
     urlOptions = Map(
